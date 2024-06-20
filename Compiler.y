@@ -36,6 +36,7 @@
     nodeType* linspace(double start, double stop, double num);
     nodeType* logspace(double start, double stop, double num);
     nodeType* transpose_array(nodeType* input);
+    nodeType* cross_product(nodeType* matrix1, nodeType* matrix2);
 
     // 4. Function needed in .lex file
     int yylex(void);
