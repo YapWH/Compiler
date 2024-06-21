@@ -4,12 +4,12 @@
     #include <string.h>
     #include <time.h>
     #include "data_struct.h"
-    #include "MM.tab.h"
+    #include "Compiler.tab.h"
     void yyerror(char*);
     int symLookup(char *s);    
     
     // Declaration of variable
-    int START_ID = 100;  // ID 0-99 is reserved for keyword
+    int START_ID = 100;                  // ID 0-99 is reserved for keyword
     int current_id;                      // Store the index of current usable id to store the variable        
     SymbolTable *list_name = NULL;       // pointer that point to the last node in the linked_list
     SymbolTable *start_list_name = NULL; // pointer that point to the start of list_name
@@ -21,7 +21,7 @@
                         yylval.dValue = atof(yytext);
                         return DOUBLE;
                     }
-[1-9][0-9]*         {    
+[1-9][0-9]*         {
                         yylval.dValue = atof(yytext);
                         return DOUBLE;
                     } 
