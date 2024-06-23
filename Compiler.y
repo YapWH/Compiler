@@ -1,11 +1,11 @@
 %{
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <math.h>
-    #include <string.h>
-    #include <stdarg.h>
-    #include <time.h>
-    #include "data_struct.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include <stdarg.h>
+#include <time.h>
+#include "data_struct.h"
 
     /* Declaration of function*/
     // 1. Function to print out the expression
@@ -37,6 +37,8 @@
     nodeType* logspace(double start, double stop, double num);
     nodeType* transpose_array(nodeType* input);
     nodeType* cross_product(nodeType* matrix1, nodeType* matrix2);
+    nodeType* scalar_mul_mat(nodeType *scalar, nodeType* matrix1);
+    nodeType* mat_mul_scalar(nodeType* matrix1, nodeType* scalar);
 
     // 4. Function needed in .lex file
     int yylex(void);
@@ -392,6 +394,19 @@ nodeType *func_operation(){
                                 p->mat.matrix[i][j] = apply_function(count_arg, arguments[0]->mat.matrix[i][j], arguments[1]->cons);
                             }
                         }
+                    }
+                    else if (temp_Identifier == 27){
+                        p = mat_mul_scalar(arguments[0], arguments[1]);
+                    }
+                    else{
+                        printf("Incorrect format of arguments.\n");
+                        error_flag = 1;
+                        return NULL;
+                    }
+                }
+                else if (arguments[0]->type == typeConstant && arguments[1]->type == typeMatrix){
+                    if (temp_Identifier == 26){
+                        p = scalar_mul_mat(arguments[0], arguments[1]);
                     }
                     else{
                         printf("Incorrect format of arguments.\n");
@@ -855,5 +870,51 @@ nodeType* transpose_array(nodeType* input){
         printf("Invalid variable type for transpose function.\n");
     }
     
+    return p;
+}
+
+// Multiply a acalar with a matrix
+nodeType* scalar_mul_mat(nodeType *scalar, nodeType *matrix1) {
+    int rows = matrix1->mat.row;
+    int cols = matrix1->mat.col;
+
+    // Allocate memory for the resulting matrix
+    nodeType* p = malloc(sizeof(nodeType));
+    p->type = typeMatrix;
+    p->mat.row = rows;
+    p->mat.col = cols;
+    p->mat.matrix = malloc(sizeof(double*) * rows);
+
+    // Perform scalar multiplication
+    for (int i = 0; i < rows; i++) {
+        p->mat.matrix[i] = malloc(sizeof(double) * cols);
+        for (int j = 0; j < cols; j++) {
+            p->mat.matrix[i][j] = scalar->cons * matrix1->mat.matrix[i][j];
+        }
+    }
+
+    return p;
+}
+
+// Multiply a matrix with a scalar
+nodeType* mat_mul_scalar(nodeType *matrix1, nodeType *scalar) {
+    int rows = matrix1->mat.row;
+    int cols = matrix1->mat.col;
+
+    // Allocate memory for the resulting matrix
+    nodeType* p = malloc(sizeof(nodeType));
+    p->type = typeMatrix;
+    p->mat.row = rows;
+    p->mat.col = cols;
+    p->mat.matrix = malloc(sizeof(double*) * rows);
+
+    // Perform scalar multiplication
+    for (int i = 0; i < rows; i++) {
+        p->mat.matrix[i] = malloc(sizeof(double) * cols);
+        for (int j = 0; j < cols; j++) {
+            p->mat.matrix[i][j] = matrix1->mat.matrix[i][j] * scalar->cons;
+        }
+    }
+
     return p;
 }

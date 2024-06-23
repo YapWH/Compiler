@@ -83,6 +83,8 @@ int symLookup(char *s){
     else if(strcmp(s, "zeros") ==0)      return 23;
     else if(strcmp(s, "ones") ==0)       return 24;
     else if(strcmp(s, "cross") ==0)      return 25;
+    else if(strcmp(s, "scamulmat") ==0)  return 26;
+    else if(strcmp(s, "matmulsca") ==0)  return 27;
 
     else if(strcmp(s, "reshape") == 0)   return 30;
     else if(strcmp(s, "linspace") ==0)   return 31;
