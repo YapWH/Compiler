@@ -6,6 +6,8 @@
 #include <stdarg.h>
 #include <time.h>
 #include "data_struct.h"
+#include "matrix.h"
+#include "plugin_LP_Sover.h"
 
     /* Declaration of function*/
     // 1. Function to print out the expression
