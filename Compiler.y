@@ -918,8 +918,23 @@ nodeType* mat_mul_scalar(nodeType *matrix1, nodeType *scalar) {
         }
     }
 
-// Find the Determinant of a matrix
-nodeType* determinant(nodeType)
+    return p;
+}
 
+// Find the Determinant of a matrix
+nodeType* determinant(nodeType *matrix1){
+    p = M_det(matrix1);
+    return p;
+}
+
+// Find the Eigenvalues and corresponding eigenvectors of a matrix
+nodeType* eigen(nodeType *matrix1){
+    p = M_eigen(matrix1);
+    return p;
+}
+
+// Find the Trace of a matrix
+nodeType* trace(nodeType *matrix1){
+    p = M_tr(matrix1);
     return p;
 }
