@@ -916,5 +916,8 @@ nodeType* mat_mul_scalar(nodeType *matrix1, nodeType *scalar) {
         }
     }
 
+// Find the Determinant of a matrix
+nodeType* determinant(nodeType)
+
     return p;
 }
