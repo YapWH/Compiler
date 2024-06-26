@@ -44,6 +44,7 @@
     nodeType* determinant(nodeType* matrix1);
     nodeType* eigen(nodeType* matrix1);
     nodeType* trace(nodeType* matrix1);
+    nodeType* inverse_matrix(nodeType* input);
 
     // 4. Function needed in .lex file
     int yylex(void);
@@ -348,6 +349,9 @@ nodeType *func_operation(){
                     }
                     else if (temp_Identifier == 20){
                         return trace(arguments[0]);
+                    }
+                    else if (temp_Identifier == 21){
+                        return inverse_matrix(arguments[0]);
                     }
                 } 
             }
@@ -948,5 +952,84 @@ nodeType* eigen(nodeType *matrix1){
 // Find the Trace of a matrix
 nodeType* trace(nodeType *matrix1){
     p = M_tr(matrix1);
+    return p;
+}
+
+// Function to compute the inverse of a matrix
+nodeType* inverse_matrix(nodeType* input) {
+    if (input->type != typeMatrix) {
+        error_flag = 1;
+        printf("Invalid input type. Only matrices can be inverted.\n");
+        return NULL;
+    }
+
+    int n = input->mat.row;
+    if (n != input->mat.col) {
+        error_flag = 1;
+        printf("Matrix must be square to find its inverse. Rows: %d, Cols: %d\n", n, input->mat.col);
+        return NULL;
+    }
+
+    // Allocate memory for the resulting matrix
+    nodeType* p = malloc(sizeof(nodeType));
+    p->type = typeMatrix;
+    p->mat.row = n;
+    p->mat.col = n;
+    p->mat.matrix = malloc(sizeof(double*) * n);
+
+    for (int i = 0; i < n; i++) {
+        p->mat.matrix[i] = malloc(sizeof(double) * n);
+    }
+
+    // Create augmented matrix with the identity matrix
+    double** aug = malloc(n * sizeof(double*));
+    for (int i = 0; i < n; i++) {
+        aug[i] = malloc(2 * n * sizeof(double));
+        for (int j = 0; j < n; j++) {
+            aug[i][j] = input->mat.matrix[i][j];
+        }
+        for (int j = n; j < 2 * n; j++) {
+            aug[i][j] = (i == j - n) ? 1 : 0;
+        }
+    }
+
+    // Perform Gaussian elimination
+    for (int i = 0; i < n; i++) {
+        if (aug[i][i] == 0) {
+            error_flag = 1;
+            printf("Matrix is singular and cannot be inverted.\n");
+            return NULL;
+        }
+        for (int j = 0; j < n; j++) {
+            if (i != j) {
+                double ratio = aug[j][i] / aug[i][i];
+                for (int k = 0; k < 2 * n; k++) {
+                    aug[j][k] -= ratio * aug[i][k];
+                }
+            }
+        }
+    }
+
+    // Normalize the diagonal
+    for (int i = 0; i < n; i++) {
+        double diag = aug[i][i];
+        for (int j = 0; j < 2 * n; j++) {
+            aug[i][j] /= diag;
+        }
+    }
+
+    // Extract the inverse matrix
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            p->mat.matrix[i][j] = aug[i][j + n];
+        }
+    }
+
+    // Free the augmented matrix
+    for (int i = 0; i < n; i++) {
+        free(aug[i]);
+    }
+    free(aug);
+
     return p;
 }
