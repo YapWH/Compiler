@@ -8,6 +8,8 @@
 #include "data_struct.h"
 #include "matrix.h"
 #include "plugin_LP_Sover.h"
+#include "gsl_matrix.h"
+#include "gsl_eigen.h"
 
     /* Declaration of function*/
     // 1. Function to print out the expression
@@ -938,24 +940,111 @@ nodeType* mat_mul_scalar(nodeType *matrix1, nodeType *scalar) {
 }
 
 // Find the Determinant of a matrix
-nodeType* determinant(nodeType *matrix1){
-    nodeType* p = malloc(sizeof(nodeType));
-    p = M_det(matrix1);
-    return p;
+double determinant_recursive(double **matrix, int n) {
+    double det = 0;
+    if (n == 1) {
+        return matrix[0][0];
+    }
+    if (n == 2) {
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+    }
+    double **submatrix = (double **)malloc((n - 1) * sizeof(double *));
+    for (int i = 0; i < n - 1; i++) {
+        submatrix[i] = (double *)malloc((n - 1) * sizeof(double));
+    }
+    for (int x = 0; x < n; x++) {
+        int subi = 0;
+        for (int i = 1; i < n; i++) {
+            int subj = 0;
+            for (int j = 0; j < n; j++) {
+                if (j == x) continue;
+                submatrix[subi][subj] = matrix[i][j];
+                subj++;
+            }
+            subi++;
+        }
+        det += (x % 2 == 0 ? 1 : -1) * matrix[0][x] * determinant_recursive(submatrix, n - 1);
+    }
+    for (int i = 0; i < n - 1; i++) {
+        free(submatrix[i]);
+    }
+    free(submatrix);
+    return det;
+}
+
+nodeType* determinant(nodeType *matrix1) {
+    if (matrix1->rows != matrix1->cols) {
+        fprintf(stderr, "Matrix must be square to compute determinant.\n");
+        exit(EXIT_FAILURE);
+    }
+    nodeType *result = (nodeType *)malloc(sizeof(nodeType));
+    result->rows = 1;
+    result->cols = 1;
+    result->data = (double **)malloc(sizeof(double *));
+    result->data[0] = (double *)malloc(sizeof(double));
+    result->data[0][0] = determinant_recursive(matrix1->data, matrix1->rows);
+    return result;
 }
 
 // Find the Eigenvalues and corresponding eigenvectors of a matrix
-nodeType* eigen(nodeType *matrix1){
-    nodeType* p = malloc(sizeof(nodeType));
-    p = M_eigen(matrix1);
-    return p;
+nodeType* eigen(nodeType *matrix1) {
+    if (matrix1->rows != matrix1->cols) {
+        fprintf(stderr, "Matrix must be square to compute eigenvalues and eigenvectors.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int n = matrix1->rows;
+    gsl_matrix *m = gsl_matrix_alloc(n, n);
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            gsl_matrix_set(m, i, j, matrix1->data[i][j]);
+        }
+    }
+
+    gsl_vector *eval = gsl_vector_alloc(n);
+    gsl_matrix *evec = gsl_matrix_alloc(n, n);
+    gsl_eigen_symmv_workspace *w = gsl_eigen_symmv_alloc(n);
+
+    gsl_eigen_symmv(m, eval, evec, w);
+
+    gsl_eigen_symmv_free(w);
+    gsl_matrix_free(m);
+
+    nodeType *result = (nodeType *)malloc(sizeof(nodeType));
+    result->rows = n;
+    result->cols = 2; // 第一列为特征值，后面列为对应的特征向量
+    result->data = (double **)malloc(n * sizeof(double *));
+    for (int i = 0; i < n; i++) {
+        result->data[i] = (double *)malloc((n + 1) * sizeof(double));
+        result->data[i][0] = gsl_vector_get(eval, i);
+        for (int j = 0; j < n; j++) {
+            result->data[i][j + 1] = gsl_matrix_get(evec, i, j);
+        }
+    }
+
+    gsl_vector_free(eval);
+    gsl_matrix_free(evec);
+
+    return result;
 }
 
 // Find the Trace of a matrix
-nodeType* trace(nodeType *matrix1){
-    nodeType* p = malloc(sizeof(nodeType));
-    p = M_tr(matrix1);
-    return p;
+nodeType* trace(nodeType *matrix1) {
+    if (matrix1->rows != matrix1->cols) {
+        fprintf(stderr, "Matrix must be square to compute trace.\n");
+        exit(EXIT_FAILURE);
+    }
+    double trace = 0;
+    for (int i = 0; i < matrix1->rows; i++) {
+        trace += matrix1->data[i][i];
+    }
+    nodeType *result = (nodeType *)malloc(sizeof(nodeType));
+    result->rows = 1;
+    result->cols = 1;
+    result->data = (double **)malloc(sizeof(double *));
+    result->data[0] = (double *)malloc(sizeof(double));
+    result->data[0][0] = trace;
+    return result;
 }
 
 // Function to compute the inverse of a matrix
