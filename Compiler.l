@@ -53,9 +53,9 @@ int yywrap(){ return 1; }
 
 int symLookup(char *s){
     /* 
-        range [0 ,20 ) is function with 1 argument
-        range [20,30 ) is function with 2 arguments
-        range [30,40 ) is function with 3 arguments
+        range [0 ,25 ) is function with 1 argument
+        range [25,35 ) is function with 2 arguments
+        range [35,40 ) is function with 3 arguments
         range [40,100) is function with 0 argument 
     */
     if (strcmp(s, "sin") == 0)           return 0;
@@ -79,20 +79,21 @@ int symLookup(char *s){
     else if(strcmp(s, "det") == 0)       return 18;
     else if(strcmp(s, "eig") == 0)       return 19;
     else if(strcmp(s, "trace") == 0)     return 20;
+    else if(strcmp(s, "inverse")==0)     return 21;
     
-    else if(strcmp(s, "mod") == 0)       return 20;
-    else if(strcmp(s, "horzat") == 0)    return 21;
-    else if(strcmp(s, "verzat") == 0)    return 22;
-    else if(strcmp(s, "zeros") ==0)      return 23;
-    else if(strcmp(s, "ones") ==0)       return 24;
-    else if(strcmp(s, "cross") ==0)      return 25;
-    else if(strcmp(s, "scamulmat") ==0)  return 26;
-    else if(strcmp(s, "matmulsca") ==0)  return 27;
+    else if(strcmp(s, "mod") == 0)       return 25;
+    else if(strcmp(s, "horzat") == 0)    return 26;
+    else if(strcmp(s, "verzat") == 0)    return 27;
+    else if(strcmp(s, "zeros") ==0)      return 28;
+    else if(strcmp(s, "ones") ==0)       return 29;
+    else if(strcmp(s, "cross") ==0)      return 30;
+    else if(strcmp(s, "scamulmat") ==0)  return 31;
+    else if(strcmp(s, "matmulsca") ==0)  return 32;
 
-    else if(strcmp(s, "reshape") == 0)   return 30;
-    else if(strcmp(s, "linspace") ==0)   return 31;
-    else if(strcmp(s, "logspace") ==0)   return 32;
+    else if(strcmp(s, "reshape") == 0)   return 35;
+    else if(strcmp(s, "linspace") ==0)   return 36;
+    else if(strcmp(s, "logspace") ==0)   return 37;
 
-    else if(strcmp(s, "clear") ==0)        return 40;
+    else if(strcmp(s, "clear") ==0)      return 40;
     else if(strcmp(s, "ans") ==0)        return 41;
 }

@@ -267,7 +267,7 @@ nodeType *func_operation(){
     switch (count_arg){
         case 1:
         {
-            if (temp_Identifier < 20)
+            if (temp_Identifier < 25)
             {
                 if (arguments[0]->type == typeConstant){
                     p->type = typeConstant;
@@ -361,16 +361,16 @@ nodeType *func_operation(){
         }
         case 2:
         {
-            if (temp_Identifier >= 20 && temp_Identifier < 30)
+            if (temp_Identifier >= 25 && temp_Identifier < 35)
             {
                 if (arguments[0]->type == typeConstant && arguments[1]->type == typeConstant){
-                    if (temp_Identifier == 23){
+                    if (temp_Identifier == 28){
                         return create_array(arguments[0], arguments[1], 0.0);
                     } 
-                    else if (temp_Identifier == 24){
+                    else if (temp_Identifier == 29){
                         return create_array(arguments[0], arguments[1], 1.0);
                     }
-                    else if (temp_Identifier == 20){
+                    else if (temp_Identifier == 25){
                         p->type = typeConstant;
                         p->cons = apply_function(count_arg, arguments[0]->cons, arguments[1]->cons);
                     }
@@ -381,7 +381,7 @@ nodeType *func_operation(){
                     }
                 }
                 else if (arguments[0]->type == typeVector && arguments[1]->type == typeConstant){
-                    if (temp_Identifier == 20){
+                    if (temp_Identifier == 25){
                         p->type = typeVector;
                         p->vec.length = arguments[0]->vec.length;
                         p->vec.vector = malloc(sizeof(arguments[0]->vec.vector));
@@ -396,7 +396,7 @@ nodeType *func_operation(){
                     }
                 }
                 else if (arguments[0]->type == typeMatrix && arguments[1]->type == typeConstant){
-                    if (temp_Identifier == 20){
+                    if (temp_Identifier == 25){
                         p->type = typeMatrix;
                         p->mat.row    = arguments[0]->mat.row;
                         p->mat.col    = arguments[0]->mat.col;
@@ -409,7 +409,7 @@ nodeType *func_operation(){
                             }
                         }
                     }
-                    else if (temp_Identifier == 27){
+                    else if (temp_Identifier == 32){
                         p = mat_mul_scalar(arguments[0], arguments[1]);
                     }
                     else{
@@ -419,7 +419,7 @@ nodeType *func_operation(){
                     }
                 }
                 else if (arguments[0]->type == typeConstant && arguments[1]->type == typeMatrix){
-                    if (temp_Identifier == 26){
+                    if (temp_Identifier == 31){
                         p = scalar_mul_mat(arguments[0], arguments[1]);
                     }
                     else{
@@ -429,11 +429,11 @@ nodeType *func_operation(){
                     }
                 }
                 else if (arguments[0]->type == typeMatrix && arguments[1]->type == typeMatrix ){
-                    if (temp_Identifier == 21)
+                    if (temp_Identifier == 26)
                         return horzat_array(arguments[0], arguments[1]);
-                    else if (temp_Identifier == 22)
+                    else if (temp_Identifier == 27)
                         return verzat_array(arguments[0], arguments[1]);
-                    else if (temp_Identifier == 25)
+                    else if (temp_Identifier == 30)
                         return cross_product(arguments[0], arguments[1]);
                     else{
                         printf("Incorrect format of arguments.\n");
@@ -457,10 +457,10 @@ nodeType *func_operation(){
         }
         case 3:
         {
-            if (temp_Identifier >= 30 && temp_Identifier < 40)
+            if (temp_Identifier >= 35 && temp_Identifier < 40)
             {
                 if ((arguments[0]->type == typeMatrix || arguments[0]->type == typeVector) && arguments[1]->type == typeConstant && arguments[2]->type == typeConstant){ 
-                    if (temp_Identifier == 30){
+                    if (temp_Identifier == 35){
                         return reshape_array(arguments[0], arguments[1], arguments[2]);
                     }
                     else{
@@ -470,9 +470,9 @@ nodeType *func_operation(){
                     }
                 }
                 else if (arguments[0]->type == typeConstant && arguments[1]->type == typeConstant && arguments[2]->type == typeConstant){
-                    if (temp_Identifier == 31)
+                    if (temp_Identifier == 36)
                         return linspace(arguments[0]->cons, arguments[1]->cons, arguments[2]->cons);
-                    else if (temp_Identifier == 32)
+                    else if (temp_Identifier == 37)
                         return logspace(arguments[0]->cons, arguments[1]->cons, arguments[2]->cons);
                     else{
                         printf("Incorrect format of arguments.\n");
