@@ -41,6 +41,9 @@
     nodeType* cross_product(nodeType* matrix1, nodeType* matrix2);
     nodeType* scalar_mul_mat(nodeType *scalar, nodeType* matrix1);
     nodeType* mat_mul_scalar(nodeType* matrix1, nodeType* scalar);
+    nodeType* determinant(nodeType* matrix1);
+    nodeType* eigen(nodeType* matrix1);
+    nodeType* trace(nodeType* matrix1);
 
     // 4. Function needed in .lex file
     int yylex(void);
@@ -336,6 +339,15 @@ nodeType *func_operation(){
                     }
                     else if (temp_Identifier == 17){
                             return transpose_array(arguments[0]);
+                    }
+                    else if (temp_Identifier == 18){
+                        return determinant(arguments[0]);
+                    }
+                    else if (temp_Identifier == 19){
+                        return eigen(arguments[0]);
+                    }
+                    else if (temp_Identifier == 20){
+                        return trace(arguments[0]);
                     }
                 } 
             }

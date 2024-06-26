@@ -76,6 +76,9 @@ int symLookup(char *s){
     else if(strcmp(s, "ndims") ==0)      return 15;
     else if(strcmp(s, "numel") ==0)      return 16;
     else if(strcmp(s, "transpose") == 0) return 17;
+    else if(strcmp(s, "det") == 0)       return 18;
+    else if(strcmp(s, "eig") == 0)       return 19;
+    else if(strcmp(s, "trace") == 0)     return 20;
     
     else if(strcmp(s, "mod") == 0)       return 20;
     else if(strcmp(s, "horzat") == 0)    return 21;
