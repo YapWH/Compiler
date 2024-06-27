@@ -53,7 +53,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 71 "Compiler.y"
+#line 68 "Compiler.y"
                         
     int id;                 /* Integer value */
     double dValue;          /* Double value*/
