@@ -6,8 +6,6 @@
 #include <stdarg.h>
 #include <time.h>
 #include "data_struct.h"
-#include "matrix.h"
-#include "plugin_LP_Sover.h"
 #include "gsl_matrix.h"
 #include "gsl_eigen.h"
 
