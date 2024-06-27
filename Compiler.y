@@ -983,7 +983,7 @@ nodeType* determinant(nodeType *matrix1) {
 }
 
 // Find the Eigenvalues and corresponding eigenvectors of a matrix
-nodeType ** M_eigen (nodeType *_mat) {/*
+nodeType ** M_eigen (nodeType *_mat) {
     nodeType ** M_array_eigen_vec = NULL;
     if (_mat->column == _mat->row) {
         M_array_eigen_vec = (nodeType **)malloc(sizeof(nodeType *)*2); 
