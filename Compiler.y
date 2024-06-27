@@ -795,9 +795,9 @@ nodeType* verzat_array(nodeType* matrix1, nodeType* matrix2) {
 }
 
 nodeType* cross_product(nodeType* matrix1, nodeType* matrix2) {
-    if (matrix1->type != typeVector || matrix2->type != typeVector) {
+    if (matrix1->type != typeMatrix || matrix2->type != typeMatrix) {
         error_flag = 1;
-        printf("Invalid input types. Only vectors can be cross multiplied.\n");
+        printf("Invalid input types. Only matrix can be cross multiplied.\n");
     }
 
     if (matrix1->mat.col != matrix2->mat.row){
