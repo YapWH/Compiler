@@ -587,7 +587,6 @@ double calculate(double a, double b, char opr1){
     else if (opr1 == '*' )return a*b;
     else if (opr1 == '/') return a/b;
     else if (opr1 == '^') return pow(a,b);
-    else if (opr1 == '%') return fmod(a,b);
 }
 
 double U_calculate(double a, char opr1){
