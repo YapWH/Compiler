@@ -425,10 +425,12 @@ nodeType *func_operation(){
                     if (temp_Identifier == 31){
                         return scalar_mul_mat(arguments[0], arguments[1]);
                     }
+		}
 		else if (arguments[0]->type == typeVector && arguments[1]->type == typeConstant){
                     if (temp_Identifier == 31){
                         return mat_mul_scalar(arguments[0], arguments[1]);
                     }
+		}
 		else if (arguments[0]->type == typeConstant && arguments[1]->type == typeVector){
                     if (temp_Identifier == 31){
                         return scalar_mul_mat(arguments[0], arguments[1]);
