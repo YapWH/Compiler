@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../matrix.h"
+#include "matrix.h"
 
 // _SILENT_MODE_ == True(1) -> solver keep silence.
 #define _SILENT_MODE_ 1
@@ -35,7 +35,7 @@
 
 typedef struct _matrix_LP_struct {
     /*Store the result of matrix_inverse
-	´æ´¢ÇóÄæÔËËãµÄÖÐ¼ä½á¹û£¬Ìá¸ßËã·¨Ð§ÂÊ*/
+	ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã·¨Ð§ï¿½ï¿½*/
     Matrix *_matrix;
     struct _Elementary_Transformation *_Etrans_head;
     struct _Elementary_Transformation *_Etrans_tail;
@@ -43,7 +43,7 @@ typedef struct _matrix_LP_struct {
 
 typedef struct _matrix_LP_result_struct {
     /*Store the result of matrix_inverse
-	´æ´¢ÇóÄæÔËËãµÄÖÐ¼ä½á¹û£¬Ìá¸ßËã·¨Ð§ÂÊ*/
+	ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ã·¨Ð§ï¿½ï¿½*/
     Matrix *_matrix_A;
     Matrix *_matrix_b;
     Matrix *_matrix_c;
@@ -100,10 +100,10 @@ int f_position_list_max(MATRIX_TYPE* list, int len){
 }
 
 Matrix *Etrans_4_LP_Solver (Matrix *_mat_result, Etrans_struct *_Etrans_, int line_setting, int usage, int is_drop) {/*Inverse_Element_trans_to_Matrix
-	»ù±¾±ä»»×ª¾ØÕóµÄ×ªÖÃ*/
+	ï¿½ï¿½ï¿½ï¿½ï¿½ä»»×ªï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½*/
     Etrans_struct *temp_Etrans = _Etrans_, *temp_Etrans_pre = _Etrans_;
     int temp_num = 0;
-    // ´Ë´¦·½°¸¸ÐÐ» @1u2e, github.com/Amoiensis/Matrix_hub/issues/4
+    // ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð» @1u2e, github.com/Amoiensis/Matrix_hub/issues/4
     while (temp_Etrans != NULL) {
         if(usage == _INVERSE_){
             temp_num = temp_Etrans->minuend_line;
@@ -127,13 +127,13 @@ Matrix *Etrans_4_LP_Solver (Matrix *_mat_result, Etrans_struct *_Etrans_, int li
 }
 
 M_lp_struct *M_Dia_E_Row_4_LP(Matrix *_mat_source){/*Upper_triangular_transformation_for_Inverse
-	ÉÏÈý½Ç»¯_ÇóÄæÊ¹ÓÃ*/
+	ï¿½ï¿½ï¿½ï¿½ï¿½Ç»ï¿½_ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½*/
     Matrix *_mat = Matrix_copy(_mat_source);
     int i, j, k, flag;
     Etrans_struct *_Etrans_temp_last = NULL;
     Etrans_struct *_Etrans_temp_head = NULL;
     Etrans_struct *_Etrans_temp_head_store = NULL;
-    /*³õµÈ±ä»»*/
+    /*ï¿½ï¿½ï¿½È±ä»»*/
     for (i = 0; i < _mat->row; i++) {
         for (j = i + 1; j < _mat->row; j++) {
             flag = 0;
@@ -148,11 +148,11 @@ M_lp_struct *M_Dia_E_Row_4_LP(Matrix *_mat_source){/*Upper_triangular_transforma
             } else {
                 _Etrans_temp->scale = 0;
                 for (k = i + 1; k < _mat->row; k++) {
-                    flag = 1;//ÎÞ¿ÉÌæ´úÐÐ
+                    flag = 1;//ï¿½Þ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     if ((_mat->data[(_mat->column) * k + i]) != 0) {
                         _Etrans_temp->minuend_line = -(i + 1);
                         _Etrans_temp->subtractor_line = -(k + 1);
-                        flag = 2;//±íÊ¾ÄÜ¹»Ìæ»»ÐÐ
+                        flag = 2;//ï¿½ï¿½Ê¾ï¿½Ü¹ï¿½ï¿½æ»»ï¿½ï¿½
                         break;
                     }
                 }
@@ -167,7 +167,7 @@ M_lp_struct *M_Dia_E_Row_4_LP(Matrix *_mat_source){/*Upper_triangular_transforma
             if (_Etrans_temp_head == NULL) {
                 _Etrans_temp_head = _Etrans_temp;
                 _Etrans_temp->forward_E_trans = NULL;
-                // [ÐÂÔö] ´æ´¢³õ·ê±ä»»
+                // [ï¿½ï¿½ï¿½ï¿½] ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ä»»
                 _Etrans_temp_head_store =_Etrans_temp_head;
             } else {
                 _Etrans_temp->forward_E_trans = _Etrans_temp_last;
@@ -201,11 +201,11 @@ M_lp_struct *M_Dia_E_Row_4_LP(Matrix *_mat_source){/*Upper_triangular_transforma
             } else {
                 _Etrans_temp->scale = 0;
                 for (k = i + 1; k < _mat->row; k++) {
-                    flag = 1;//ÎÞ¿ÉÌæ´úÐÐ
+                    flag = 1;//ï¿½Þ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     if ((_mat->data[(_mat->column) * k + i]) != 0) {
                         _Etrans_temp->minuend_line = -(i + 1);
                         _Etrans_temp->subtractor_line = -(k + 1);
-                        flag = 2;//±íÊ¾ÄÜ¹»Ìæ»»ÐÐ
+                        flag = 2;//ï¿½ï¿½Ê¾ï¿½Ü¹ï¿½ï¿½æ»»ï¿½ï¿½
                         break;
                     }
                 }
@@ -219,7 +219,7 @@ M_lp_struct *M_Dia_E_Row_4_LP(Matrix *_mat_source){/*Upper_triangular_transforma
             if (_Etrans_temp_head == NULL) {
                 _Etrans_temp_head = _Etrans_temp;
                 _Etrans_temp->forward_E_trans = NULL;
-                // [ÐÂÔö] ´æ´¢³õ·ê±ä»»
+                // [ï¿½ï¿½ï¿½ï¿½] ï¿½æ´¢ï¿½ï¿½ï¿½ï¿½ä»»
                 _Etrans_temp_head_store =_Etrans_temp_head;
             } else {
                 _Etrans_temp->forward_E_trans = _Etrans_temp_last;
@@ -261,19 +261,19 @@ M_LP_struct * LP_simplex_method(Matrix* mat_A,Matrix* mat_B,Matrix* mat_C){/*
  * Simplex
  */
     M_LP_struct * M_LP_Result = NULL;
-// ³õÊ¼»ù±äÁ¿µÄÑ¡Ôñ, ¿ÉÒÔÊ¹ÓÃ rank ¾ØÕóµÄÖÈÀ´½øÐÐ, ¿ÉÒÔ±ÜÃâÖØ¸´¼ÆËã;
+// ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ rank ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½;
     int base_num = mat_A->row, variable_num = mat_A->column,row, col;
     int max_delta_position = -1, min_theta_position = -1, staues_opt = 0;
-// Ö±½Ó¶Ô[A, b]¾ØÕóÇórank.
-// ºóÐø¿ÉÒÔÖ±½Ó¶Ô Ô¼Êø½øÐÐ´¦Àí, É¾³ý²¿·ÖÖØ¸´µÄÔ¼Êø.
+// Ö±ï¿½Ó¶ï¿½[A, b]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rank.
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó¶ï¿½ Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½, É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½.
     Matrix *mat_base = NULL, *vector_base_index=NULL, *mat_C_base , *Delta_opt = NULL, *thelta_opt = NULL
     , * mat_A_copy = NULL, * mat_b_copy = NULL;
     vector_base_index = M_Zeros(1, base_num);
     mat_A_copy = Matrix_copy(mat_A);
     mat_b_copy = Matrix_copy(mat_B);
-    // »ñÈ¡»ù½âÎ»ÖÃ
+    // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
     M_lp_struct *_Uptri_ = M_Dia_E_Row_4_LP(mat_A_copy);//M_Uptri_4_LP(mat_A_copy);
-    // ÈË¹¤±äÁ¿ÔÚ¿ªÍ·.
+    // ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¿ï¿½Í·.
     for(row=0;row<base_num;row++){
         for(col=0;col<variable_num;col++){
             // mat_B->column = 1, variable_num = mat_A->column.
@@ -290,7 +290,7 @@ M_LP_struct * LP_simplex_method(Matrix* mat_A,Matrix* mat_B,Matrix* mat_C){/*
 
     int Counter = 0;
     while(Counter < _MAX_LOOP_NUM_) {
-        // µ÷Õû»ù±äÁ¿
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if ((max_delta_position >= 0) & (min_theta_position >= 0)){
             for(row=0;row<base_num;row++){
                 if(vector_base_index->data[row] == min_theta_position){
@@ -298,7 +298,7 @@ M_LP_struct * LP_simplex_method(Matrix* mat_A,Matrix* mat_B,Matrix* mat_C){/*
                     break;
                 }
                 if (row == (base_num-1)){
-                    // ±ÜÃâÑ­»·ÕÒ»ù½â;
+                    // ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½;
                     vector_base_index->data[0] = max_delta_position;
                 }
             }
@@ -307,7 +307,7 @@ M_LP_struct * LP_simplex_method(Matrix* mat_A,Matrix* mat_B,Matrix* mat_C){/*
             printf("[BASE]\n");
             M_print(vector_base_index);
         }
-        // ½«ÉÏÈý½Ç¾ØÕóÈ¡³ö
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½È¡ï¿½ï¿½
         if (Counter == 0){
             mat_base = M_Sample(_Uptri_->_matrix, vector_base_index, _COLUMN_);
         }else{
@@ -317,7 +317,7 @@ M_LP_struct * LP_simplex_method(Matrix* mat_A,Matrix* mat_B,Matrix* mat_C){/*
         mat_C_base = M_Sample(mat_C, vector_base_index, _COLUMN_);
         mat_A_copy = Etrans_4_LP_Solver(mat_A_copy, _Uptri_->_Etrans_tail, _ROW_, _LP_SOLVER_, _NOT_DROP_);
         mat_b_copy = Etrans_4_LP_Solver(mat_b_copy, _Uptri_->_Etrans_tail, _ROW_, _LP_SOLVER_, _DROP_);
-        // ½«±¶Êý½øÐÐ´¦Àí
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½
         MATRIX_TYPE factor = 1;
         for (row = 0; row < base_num; row++) {
             factor = mat_A_copy->data[row * (variable_num) + (int)vector_base_index->data[row]];
@@ -334,7 +334,7 @@ M_LP_struct * LP_simplex_method(Matrix* mat_A,Matrix* mat_B,Matrix* mat_C){/*
         if(!_SILENT_MODE_){
             printf("[TABLE] A/b\n");
             M_print(mat_A_copy);
-            M_print(mat_b_copy); // ¾ßÌå±äÁ¿È¡Öµ;
+            M_print(mat_b_copy); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡Öµ;
         }
         Matrix *mat_C_copy = M_mul(mat_C_base, mat_A_copy);
         M_free(mat_C_base);
@@ -347,11 +347,11 @@ M_LP_struct * LP_simplex_method(Matrix* mat_A,Matrix* mat_B,Matrix* mat_C){/*
         }
         M_free(mat_C_copy);
         M_free(mat_base);
-        // ½ø»ù½â, ³ö»ù½âM_print(Delta_opt);
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½M_print(Delta_opt);
         max_delta_position = f_position_list_max(Delta_opt->data, Delta_opt->column);
         if ((Delta_opt->data[max_delta_position]) > 0) {
             (!_SILENT_MODE_)?printf("Next IN Base: %d\n", max_delta_position):0;
-            // ¼ÆËã³ö»ù±äÁ¿
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             thelta_opt = M_Zeros(mat_A->row, 1);
             for (row = 0; row < base_num; row++){
                 MATRIX_TYPE temp_a, temp_b;

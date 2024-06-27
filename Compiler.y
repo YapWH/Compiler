@@ -1012,7 +1012,7 @@ nodeType* eigen(nodeType *matrix1) {
 
     nodeType *result = (nodeType *)malloc(sizeof(nodeType));
     result->rows = n;
-    result->cols = 2; // 第一列为特征值，后面列为对应的特征向量
+    result->cols = 2; 
     result->data = (double **)malloc(n * sizeof(double *));
     for (int i = 0; i < n; i++) {
         result->data[i] = (double *)malloc((n + 1) * sizeof(double));
