@@ -109,10 +109,10 @@
     nodeType* logspace(double start, double stop, double num);
     nodeType* transpose_array(nodeType* input);
     nodeType* cross_product(nodeType* matrix1, nodeType* matrix2);
-    nodeType* scalar_mul_mat(nodeType *scalar, nodeType* matrix1);
-    nodeType* mat_mul_scalar(nodeType* matrix1, nodeType* scalar);
+    nodeType* scalar_mul_mat(nodeType *scalar, nodeType* input);
+    nodeType* mat_mul_scalar(nodeType* input, nodeType* scalar);
     nodeType* determinant(nodeType* matrix1);
-    nodeType* eigen(nodeType* matrix1);
+    //nodeType* eigen(nodeType* matrix1);
     nodeType* trace(nodeType* matrix1);
     nodeType* inverse_matrix(nodeType* input);
 
@@ -2012,9 +2012,9 @@ nodeType *func_operation(){
                     else if (temp_Identifier == 18){
                         return determinant(arguments[0]);
                     }
-                    else if (temp_Identifier == 19){
-                        return eigen(arguments[0]);
-                    }
+                    // else if (temp_Identifier == 19){
+                        // return eigen(arguments[0]);
+                    //}
                     else if (temp_Identifier == 20){
                         return trace(arguments[0]);
                     }
@@ -2082,7 +2082,7 @@ nodeType *func_operation(){
                         }
                     }
                     else if (temp_Identifier == 32){
-                        p = mat_mul_scalar(arguments[0], arguments[1]);
+                        return mat_mul_scalar(arguments[0], arguments[1]);
                     }
                     else{
                         printf("Incorrect format of arguments.\n");
@@ -2092,12 +2092,7 @@ nodeType *func_operation(){
                 }
                 else if (arguments[0]->type == typeConstant && arguments[1]->type == typeMatrix){
                     if (temp_Identifier == 31){
-                        p = scalar_mul_mat(arguments[0], arguments[1]);
-                    }
-                    else{
-                        printf("Incorrect format of arguments.\n");
-                        error_flag = 1;
-                        return NULL;
+                        return scalar_mul_mat(arguments[0], arguments[1]);
                     }
                 }
                 else if (arguments[0]->type == typeMatrix && arguments[1]->type == typeMatrix ){
@@ -2468,7 +2463,7 @@ nodeType* verzat_array(nodeType* matrix1, nodeType* matrix2) {
 }
 
 // Cross product of two matrix -- temp_Identifier = 25
-nodeType* cross_array(nodeType* matrix1, nodeType* matrix2) {
+nodeType* cross_product(nodeType* matrix1, nodeType* matrix2) {
     if (matrix1->type != typeVector || matrix2->type != typeVector) {
         error_flag = 1;
         printf("Invalid input types. Only vectors can be cross multiplied.\n");
@@ -2558,49 +2553,65 @@ nodeType* transpose_array(nodeType* input){
     return p;
 }
 
-// Multiply a acalar with a matrix
-nodeType* scalar_mul_mat(nodeType *scalar, nodeType *matrix1) {
-    int rows = matrix1->mat.row;
-    int cols = matrix1->mat.col;
-
-    // Allocate memory for the resulting matrix
+// Multiply a scalar with a matrix
+nodeType* scalar_mul_mat(nodeType *scalar, nodeType *input) {
     nodeType* p = malloc(sizeof(nodeType));
     p->type = typeMatrix;
-    p->mat.row = rows;
-    p->mat.col = cols;
-    p->mat.matrix = malloc(sizeof(double*) * rows);
 
-    // Perform scalar multiplication
-    for (int i = 0; i < rows; i++) {
-        p->mat.matrix[i] = malloc(sizeof(double) * cols);
-        for (int j = 0; j < cols; j++) {
-            p->mat.matrix[i][j] = scalar->cons * matrix1->mat.matrix[i][j];
+    if (input->type == typeMatrix) {
+        p->mat.row = input->mat.row;
+        p->mat.col = input->mat.col;
+        p->mat.matrix = malloc(sizeof(double*) * p->mat.row);
+        
+        for (int i = 0; i < p->mat.row; i++) {
+            p->mat.matrix[i] = malloc(sizeof(double) * p->mat.col);
+            for (int j = 0; j < p->mat.col; j++) {
+                p->mat.matrix[i][j] = scalar->cons * input->mat.matrix[i][j];
+            }
         }
+    } else if (input->type == typeVector) {
+        p->mat.row = input->vec.length;
+        p->mat.col = 1;
+        p->mat.matrix = malloc(sizeof(double*) * p->mat.row);
+        for (int i = 0; i < p->mat.row; i++) {
+            p->mat.matrix[i] = malloc(sizeof(double) * 1);
+            p->mat.matrix[i][0] = scalar->cons * input->vec.vector[i];
+        }
+    } else {
+        error_flag = 1;
+        printf("Invalid variable type for scalar_mul_mat function.\n");
     }
-
     return p;
 }
 
 // Multiply a matrix with a scalar
-nodeType* mat_mul_scalar(nodeType *matrix1, nodeType *scalar) {
-    int rows = matrix1->mat.row;
-    int cols = matrix1->mat.col;
-
-    // Allocate memory for the resulting matrix
+nodeType* mat_mul_scalar(nodeType *input, nodeType *scalar) {
     nodeType* p = malloc(sizeof(nodeType));
     p->type = typeMatrix;
-    p->mat.row = rows;
-    p->mat.col = cols;
-    p->mat.matrix = malloc(sizeof(double*) * rows);
 
-    // Perform scalar multiplication
-    for (int i = 0; i < rows; i++) {
-        p->mat.matrix[i] = malloc(sizeof(double) * cols);
-        for (int j = 0; j < cols; j++) {
-            p->mat.matrix[i][j] = matrix1->mat.matrix[i][j] * scalar->cons;
+    if (input->type == typeMatrix) {
+        p->mat.row = input->mat.row;
+        p->mat.col = input->mat.col;
+        p->mat.matrix = malloc(sizeof(double*) * p->mat.row);
+        
+        for (int i = 0; i < p->mat.row; i++) {
+            p->mat.matrix[i] = malloc(sizeof(double) * p->mat.col);
+            for (int j = 0; j < p->mat.col; j++) {
+                p->mat.matrix[i][j] = scalar->cons * input->mat.matrix[i][j];
+            }
         }
+    } else if (input->type == typeVector) {
+        p->mat.row = input->vec.length;
+        p->mat.col = 1;
+        p->mat.matrix = malloc(sizeof(double*) * p->mat.row);
+        for (int i = 0; i < p->mat.row; i++) {
+            p->mat.matrix[i] = malloc(sizeof(double) * 1);
+            p->mat.matrix[i][0] = scalar->cons * input->vec.vector[i];
+        }
+    } else {
+        error_flag = 1;
+        printf("Invalid variable type for scalar_mul_mat function.\n");
     }
-
     return p;
 }
 
