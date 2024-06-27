@@ -41,7 +41,6 @@
     nodeType* scalar_mul_mat(nodeType *scalar, nodeType* matrix1);
     nodeType* mat_mul_scalar(nodeType* matrix1, nodeType* scalar);
     nodeType* determinant(nodeType* matrix1);
-    nodeType* eigen(nodeType* matrix1);
     nodeType* trace(nodeType* matrix1);
     nodeType* inverse_matrix(nodeType* input);
 
@@ -344,12 +343,9 @@ nodeType *func_operation(){
                         return determinant(arguments[0]);
                     }
                     else if (temp_Identifier == 19){
-                        return eigen(arguments[0]);
-                    }
-                    else if (temp_Identifier == 20){
                         return trace(arguments[0]);
                     }
-                    else if (temp_Identifier == 21){
+                    else if (temp_Identifier == 20){
                         return inverse_matrix(arguments[0]);
                     }
                 } 
@@ -614,7 +610,7 @@ double apply_function(int num, ...){
         case 12: result = sqrt(va_arg(valist, double));  break;
 
         /* Functions with 2 arguments */
-        case 20: temp_arr[0] = va_arg(valist, double); 
+        case 25: temp_arr[0] = va_arg(valist, double); 
                  result = fmod(temp_arr[0], va_arg(valist, double)); break;
         
         /* Functions with 3 arguments */
@@ -798,8 +794,7 @@ nodeType* verzat_array(nodeType* matrix1, nodeType* matrix2) {
     }
 }
 
-// Cross product of two matrix -- temp_Identifier = 25
-nodeType* cross_array(nodeType* matrix1, nodeType* matrix2) {
+nodeType* cross_product(nodeType* matrix1, nodeType* matrix2) {
     if (matrix1->type != typeVector || matrix2->type != typeVector) {
         error_flag = 1;
         printf("Invalid input types. Only vectors can be cross multiplied.\n");
@@ -983,8 +978,6 @@ nodeType* determinant(nodeType *matrix1) {
     p->mat.matrix[0][0] = determinant_recursive(matrix1->mat.matrix, matrix1->mat.row);
     return p;
 }
-
-// Find the Eigenvalues and corresponding eigenvectors of a matrix
 
 // Find the Trace of a matrix
 nodeType* trace(nodeType *matrix1) {
