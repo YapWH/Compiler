@@ -77,10 +77,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include "data_struct.h"
-#include "matrix.h"
-#include "plugin_LP_Sover.h"
-#include "gsl_matrix.h"
-#include "gsl_eigen.h"
+#include "state.h"
 
     /* Declaration of function*/
     // 1. Function to print out the expression
@@ -140,7 +137,7 @@
 
 
 /* Line 189 of yacc.c  */
-#line 144 "Compiler.tab.c"
+#line 141 "Compiler.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -181,7 +178,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 71 "Compiler.y"
+#line 68 "Compiler.y"
                         
     int id;                 /* Integer value */
     double dValue;          /* Double value*/
@@ -190,7 +187,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 194 "Compiler.tab.c"
+#line 191 "Compiler.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -202,7 +199,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 206 "Compiler.tab.c"
+#line 203 "Compiler.tab.c"
 
 #ifdef short
 # undef short
@@ -494,9 +491,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    92,    92,    93,    95,    99,   105,   108,   111,   114,
-     117,   120,   123,   126,   129,   131,   144,   145,   154,   159,
-     165,   171,   172,   174,   175,   176
+       0,    89,    89,    90,    92,    96,   102,   105,   108,   111,
+     114,   117,   120,   123,   126,   128,   141,   142,   151,   156,
+     162,   168,   169,   171,   172,   173
 };
 #endif
 
@@ -1422,7 +1419,7 @@ yyreduce:
         case 4:
 
 /* Line 1455 of yacc.c  */
-#line 95 "Compiler.y"
+#line 92 "Compiler.y"
     { symbols[(yyvsp[(1) - (3)].id)] = malloc(sizeof(nodeType));
                                     symbols[(yyvsp[(1) - (3)].id)] = (yyvsp[(3) - (3)].nPtr);
                                     symbols_id[(yyvsp[(1) - (3)].id)] = 1;
@@ -1432,7 +1429,7 @@ yyreduce:
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 99 "Compiler.y"
+#line 96 "Compiler.y"
     { if (!(temp_Identifier == 40|| temp_Identifier == 41|| temp_Identifier == 42 || temp_Identifier == 43)){
                                         print_expr((yyvsp[(1) - (1)].nPtr));
                                         ans = (yyvsp[(1) - (1)].nPtr);
@@ -1443,7 +1440,7 @@ yyreduce:
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 105 "Compiler.y"
+#line 102 "Compiler.y"
     { (yyval.nPtr) = arithmetric((yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr), '+');
                                         if (error_flag) return 1;
                                       ;}
@@ -1452,7 +1449,7 @@ yyreduce:
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 108 "Compiler.y"
+#line 105 "Compiler.y"
     { (yyval.nPtr) = arithmetric((yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr), '-');
                                         if (error_flag) return 1;
                                       ;}
@@ -1461,7 +1458,7 @@ yyreduce:
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 111 "Compiler.y"
+#line 108 "Compiler.y"
     { (yyval.nPtr) = arithmetric((yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr), '*');
                                         if (error_flag) return 1;
                                       ;}
@@ -1470,7 +1467,7 @@ yyreduce:
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 114 "Compiler.y"
+#line 111 "Compiler.y"
     { (yyval.nPtr) = arithmetric((yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr), '/');
                                         if (error_flag) return 1;
                                       ;}
@@ -1479,7 +1476,7 @@ yyreduce:
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 117 "Compiler.y"
+#line 114 "Compiler.y"
     { (yyval.nPtr) = arithmetric((yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr), '^');
                                         if (error_flag) return 1;
                                       ;}
@@ -1488,7 +1485,7 @@ yyreduce:
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 120 "Compiler.y"
+#line 117 "Compiler.y"
     { (yyval.nPtr) = arithmetric((yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr), '%');
                                         if (error_flag) return 1;
                                       ;}
@@ -1497,7 +1494,7 @@ yyreduce:
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 123 "Compiler.y"
+#line 120 "Compiler.y"
     { (yyval.nPtr) = U_arithmetric((yyvsp[(2) - (2)].nPtr), '-');
                                         if (error_flag) return 1;
                                       ;}
@@ -1506,7 +1503,7 @@ yyreduce:
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 126 "Compiler.y"
+#line 123 "Compiler.y"
     { (yyval.nPtr) = U_arithmetric((yyvsp[(2) - (2)].nPtr), '+');
                                         if (error_flag) return 1;
                                       ;}
@@ -1515,14 +1512,14 @@ yyreduce:
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 129 "Compiler.y"
+#line 126 "Compiler.y"
     { (yyval.nPtr) = (yyvsp[(2) - (3)].nPtr); ;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 131 "Compiler.y"
+#line 128 "Compiler.y"
     {
                                             if ((yyvsp[(1) - (4)].id) >= 100){
                                                 yyerror("The identifier is not a function");
@@ -1541,14 +1538,14 @@ yyreduce:
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 144 "Compiler.y"
+#line 141 "Compiler.y"
     { (yyval.nPtr) = con((yyvsp[(1) - (1)].dValue));   ;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 145 "Compiler.y"
+#line 142 "Compiler.y"
     { temp_Identifier = (yyvsp[(1) - (1)].id);
                                           if (symbols_id[(yyvsp[(1) - (1)].id)] == 1) { (yyval.nPtr) = symbols[(yyvsp[(1) - (1)].id)]; }
                                           else if((yyvsp[(1) - (1)].id) == 40) { printf("\e[1;1H\e[2J"); }
@@ -1563,7 +1560,7 @@ yyreduce:
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 154 "Compiler.y"
+#line 151 "Compiler.y"
     { temp_Identifier = 0;
                                           (yyval.nPtr) = store_matrix();
                                           row=0;  col=0; // Reset the row and column
@@ -1573,7 +1570,7 @@ yyreduce:
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 159 "Compiler.y"
+#line 156 "Compiler.y"
     {
                                           arguments[count_arg] = malloc(sizeof(nodeType));
                                           arguments[count_arg] = (yyvsp[(3) - (3)].nPtr);
@@ -1584,7 +1581,7 @@ yyreduce:
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 165 "Compiler.y"
+#line 162 "Compiler.y"
     { count_arg = 0;
                                           arguments[count_arg] = malloc(sizeof(nodeType));
                                           arguments[count_arg] = (yyvsp[(1) - (1)].nPtr);
@@ -1595,35 +1592,35 @@ yyreduce:
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 171 "Compiler.y"
+#line 168 "Compiler.y"
     { ; ;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 172 "Compiler.y"
+#line 169 "Compiler.y"
     {row ++;;}
     break;
 
   case 23:
 
 /* Line 1455 of yacc.c  */
-#line 174 "Compiler.y"
+#line 171 "Compiler.y"
     {matrix_buffer[row][col++] = (yyvsp[(2) - (2)].dValue); ;}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 175 "Compiler.y"
+#line 172 "Compiler.y"
     {matrix_buffer[row][col++] = (yyvsp[(3) - (3)].dValue);;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 176 "Compiler.y"
+#line 173 "Compiler.y"
     { col = 0;  
                                           matrix_buffer[row][col++] = (yyvsp[(1) - (1)].dValue);;}
     break;
@@ -1631,7 +1628,7 @@ yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 1635 "Compiler.tab.c"
+#line 1632 "Compiler.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1843,7 +1840,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 178 "Compiler.y"
+#line 175 "Compiler.y"
 
 
 void yyerror(char *s) {
@@ -2255,8 +2252,7 @@ double calculate(double a, double b, char opr1){
     else if (opr1 == '-') return a-b;
     else if (opr1 == '*' )return a*b;
     else if (opr1 == '/') return a/b;
-    else if (opr1 == '^') return pow(a,b)
-    else if (opr1 == '%') return fmod(a,b);
+    else if (opr1 == '^') return pow(a,b);
 }
 
 double U_calculate(double a, char opr1){
@@ -2642,77 +2638,127 @@ double determinant_recursive(double **matrix, int n) {
 }
 
 nodeType* determinant(nodeType *matrix1) {
-    if (matrix1->rows != matrix1->cols) {
+    if (matrix1->mat.row != matrix1->mat.col) {
         fprintf(stderr, "Matrix must be square to compute determinant.\n");
         exit(EXIT_FAILURE);
     }
-    nodeType *result = (nodeType *)malloc(sizeof(nodeType));
-    result->rows = 1;
-    result->cols = 1;
-    result->data = (double **)malloc(sizeof(double *));
-    result->data[0] = (double *)malloc(sizeof(double));
-    result->data[0][0] = determinant_recursive(matrix1->data, matrix1->rows);
-    return result;
+    nodeType* p = malloc(sizeof(nodeType));
+    p->type = typeMatrix;
+    p->mat.row = 1;
+    p->mat.col = 1;
+
+    p->mat.matrix = (double **)malloc(sizeof(double *));
+    p->mat.matrix[0] = (double *)malloc(sizeof(double));
+    p->mat.matrix[0][0] = determinant_recursive(matrix1->mat.matrix, matrix1->mat.row);
+    return p;
 }
 
 // Find the Eigenvalues and corresponding eigenvectors of a matrix
-nodeType* eigen(nodeType *matrix1) {
-    if (matrix1->rows != matrix1->cols) {
-        fprintf(stderr, "Matrix must be square to compute eigenvalues and eigenvectors.\n");
-        exit(EXIT_FAILURE);
-    }
+nodeType ** M_eigen (nodeType *_mat) {
+    nodeType ** M_array_eigen_vec = NULL;
+    if (_mat->mat.col == _mat->mat.row) {
+        M_array_eigen_vec = (nodeType **)malloc(sizeof(nodeType *)*2); 
+        enum{val=0, vec=1};
+        nodeType *eigen_value = M_eigen_val(_mat);
+        M_array_eigen_vec[val] = eigen_value;
+        int eigen_count, dim = _mat->mat.col, i, j, k, ik, jk;
+        nodeType *eigen_vector = NULL, *_mat_ = NULL;
+        eigen_vector = M_Zeros(dim,dim);
+        M_array_eigen_vec[vec] = eigen_vector;
+        MATRIX_TYPE eigen_value_temp, swap_value_temp;
+        MATRIX_TYPE coe; 
+        for(eigen_count=0;eigen_count<dim;eigen_count++){
+            _mat_ = Matrix_copy(_mat);
+            eigen_value_temp = eigen_value->mat.matrix[eigen_count];
+            // (A-lamda*I)
+            for (i = 0; i < dim; i++){
+                _mat_->mat.matrix[i * _mat_->mat.col + i] -= eigen_value_temp; 
+            }
+            for (i = 0; i < dim-1; i++){
+                coe = _mat_->mat.matrix[i * dim + i];
+                k = i;
+                for (j = i + 1; j < dim; j++){
+                    if (fabs(_mat_->mat.matrix[j * dim + i]) > fabs(coe)){
+                        coe = _mat_->mat.matrix[j * dim + i];
+                        k = j;
+                    }
+                }
+                if (fabs(coe) < _APPROXIMATELY_ZERO_){
+                    continue;
+                }
+                if (k != i){
+                    for (j = 0; j < dim; j++)
+                    {
+                        swap_value_temp = _mat_->mat.matrix[i * dim + j];
+                        _mat_->mat.matrix[i * dim + j] = _mat_->mat.matrix[k * dim + j];
+                        _mat_->mat.matrix[k * dim + j] = swap_value_temp;
+                    }
+                }
 
-    int n = matrix1->rows;
-    gsl_matrix *m = gsl_matrix_alloc(n, n);
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            gsl_matrix_set(m, i, j, matrix1->data[i][j]);
+                coe = _mat_->mat.matrix[i * dim + i];
+                for (j = i; j<dim; j++){
+                    _mat_->mat.matrix[i * dim + j] /= coe; 
+                }
+                for (ik = i + 1; ik < dim; ik++){
+                    coe = _mat_->mat.matrix[ik * dim + i];
+                    for (jk = i; jk < dim; jk++){
+                        _mat_->mat.matrix[ik * dim + jk] -= coe * _mat_->mat.matrix[i * dim + jk];
+                    }
+                }
+            }
+            MATRIX_TYPE sum1 = 1;
+            if (abs(_mat_->mat.matrix[(dim - 1) * dim + (dim - 1)]) > _APPROXIMATELY_ZERO_){
+                sum1 = 0;
+                eigen_vector->mat.matrix[(dim - 1) * dim + eigen_count] = 0.0f;
+            }else{
+                sum1 = 1;
+                eigen_vector->mat.matrix[(dim - 1) * dim + eigen_count] = 1;
+            }
+
+            eigen_vector->mat.matrix[(dim - 1) * dim + eigen_count] = 1;
+            for (ik = dim - 2; ik >= 0; ik--){
+                MATRIX_TYPE sum2 = 0;
+                for (jk = ik + 1; jk < dim; jk++){
+                    sum2 += _mat_->mat.matrix[ik * dim + jk] * eigen_vector->mat.matrix[jk * dim + eigen_count];
+                }
+                if (fabs(_mat_->mat.matrix[ik * dim + ik]) > _APPROXIMATELY_ZERO_){
+                
+                    sum2 = -sum2 / _mat_->mat.matrix[ik * dim + ik];
+                }else{
+                    sum2 = 1;
+                }
+                sum1 += sum2 * sum2;
+                eigen_vector->mat.matrix[ik * dim + eigen_count] = sum2;
+            }
+            M_free(_mat_);
+            sum1 = sqrt(sum1);
+            for (i = 0; i < dim; i++){
+                eigen_vector->mat.matrix[i * dim + eigen_count] /= sum1;
+            }
         }
+    }else{
+        printf(M_eigen_026);
+        system("pause");
     }
-
-    gsl_vector *eval = gsl_vector_alloc(n);
-    gsl_matrix *evec = gsl_matrix_alloc(n, n);
-    gsl_eigen_symmv_workspace *w = gsl_eigen_symmv_alloc(n);
-
-    gsl_eigen_symmv(m, eval, evec, w);
-
-    gsl_eigen_symmv_free(w);
-    gsl_matrix_free(m);
-
-    nodeType *result = (nodeType *)malloc(sizeof(nodeType));
-    result->rows = n;
-    result->cols = 2; 
-    result->data = (double **)malloc(n * sizeof(double *));
-    for (int i = 0; i < n; i++) {
-        result->data[i] = (double *)malloc((n + 1) * sizeof(double));
-        result->data[i][0] = gsl_vector_get(eval, i);
-        for (int j = 0; j < n; j++) {
-            result->data[i][j + 1] = gsl_matrix_get(evec, i, j);
-        }
-    }
-
-    gsl_vector_free(eval);
-    gsl_matrix_free(evec);
-
-    return result;
+    return M_array_eigen_vec;
 }
 
 // Find the Trace of a matrix
 nodeType* trace(nodeType *matrix1) {
-    if (matrix1->rows != matrix1->cols) {
+    if (matrix1->mat.row != matrix1->mat.col) {
         fprintf(stderr, "Matrix must be square to compute trace.\n");
         exit(EXIT_FAILURE);
     }
     double trace = 0;
-    for (int i = 0; i < matrix1->rows; i++) {
-        trace += matrix1->data[i][i];
+    for (int i = 0; i < matrix1->mat.row; i++) {
+        trace += matrix1->mat.matrix[i][i];
     }
     nodeType *result = (nodeType *)malloc(sizeof(nodeType));
-    result->rows = 1;
-    result->cols = 1;
-    result->data = (double **)malloc(sizeof(double *));
-    result->data[0] = (double *)malloc(sizeof(double));
-    result->data[0][0] = trace;
+    result->mat.row = 1;
+    result->mat.col = 1;
+    result->mat.matrix = (double **)malloc(sizeof(double *));
+    result->mat.matrix[0] = (double *)malloc(sizeof(double));
+    result->mat.matrix[0][0] = trace;
     return result;
 }
 
@@ -2794,3 +2840,4 @@ nodeType* inverse_matrix(nodeType* input) {
 
     return p;
 }
+
