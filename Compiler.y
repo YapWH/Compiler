@@ -6,10 +6,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include "data_struct.h"
-#include "matrix.h"
-#include "plugin_LP_Sover.h"
-#include "gsl_matrix.h"
-#include "gsl_eigen.h"
+#include "state.h"
 
     /* Declaration of function*/
     // 1. Function to print out the expression
@@ -987,45 +984,93 @@ nodeType* determinant(nodeType *matrix1) {
 }
 
 // Find the Eigenvalues and corresponding eigenvectors of a matrix
-nodeType* eigen(nodeType *matrix1) {
-    if (matrix1->rows != matrix1->cols) {
-        fprintf(stderr, "Matrix must be square to compute eigenvalues and eigenvectors.\n");
-        exit(EXIT_FAILURE);
-    }
+nodeType ** M_eigen (nodeType *_mat) {/*
+    nodeType ** M_array_eigen_vec = NULL;
+    if (_mat->column == _mat->row) {
+        M_array_eigen_vec = (nodeType **)malloc(sizeof(nodeType *)*2); 
+        enum{val=0, vec=1};
+        nodeType *eigen_value = M_eigen_val(_mat);
+        M_array_eigen_vec[val] = eigen_value;
+        int eigen_count, dim = _mat->column, i, j, k, ik, jk;
+        nodeType *eigen_vector = NULL, *_mat_ = NULL;
+        eigen_vector = M_Zeros(dim,dim);
+        M_array_eigen_vec[vec] = eigen_vector;
+        MATRIX_TYPE eigen_value_temp, swap_value_temp;
+        MATRIX_TYPE coe; 
+        for(eigen_count=0;eigen_count<dim;eigen_count++){
+            _mat_ = Matrix_copy(_mat);
+            eigen_value_temp = eigen_value->data[eigen_count];
+            // (A-lamda*I)
+            for (i = 0; i < dim; i++){
+                _mat_->data[i * _mat_->column + i] -= eigen_value_temp; 
+            }
+            for (i = 0; i < dim-1; i++){
+                coe = _mat_->data[i * dim + i];
+                k = i;
+                for (j = i + 1; j < dim; j++){
+                    if (fabs(_mat_->data[j * dim + i]) > fabs(coe)){
+                        coe = _mat_->data[j * dim + i];
+                        k = j;
+                    }
+                }
+                if (fabs(coe) < _APPROXIMATELY_ZERO_){
+                    continue;
+                }
+                if (k != i){
+                    for (j = 0; j < dim; j++)
+                    {
+                        swap_value_temp = _mat_->data[i * dim + j];
+                        _mat_->data[i * dim + j] = _mat_->data[k * dim + j];
+                        _mat_->data[k * dim + j] = swap_value_temp;
+                    }
+                }
 
-    int n = matrix1->rows;
-    gsl_matrix *m = gsl_matrix_alloc(n, n);
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            gsl_matrix_set(m, i, j, matrix1->data[i][j]);
+                coe = _mat_->data[i * dim + i];
+                for (j = i; j<dim; j++){
+                    _mat_->data[i * dim + j] /= coe; 
+                }
+                for (ik = i + 1; ik < dim; ik++){
+                    coe = _mat_->data[ik * dim + i];
+                    for (jk = i; jk < dim; jk++){
+                        _mat_->data[ik * dim + jk] -= coe * _mat_->data[i * dim + jk];
+                    }
+                }
+            }
+            MATRIX_TYPE sum1 = 1;
+            if (abs(_mat_->data[(dim - 1) * dim + (dim - 1)]) > _APPROXIMATELY_ZERO_){
+                sum1 = 0;
+                eigen_vector->data[(dim - 1) * dim + eigen_count] = 0.0f;
+            }else{
+                sum1 = 1;
+                eigen_vector->data[(dim - 1) * dim + eigen_count] = 1;
+            }
+
+            eigen_vector->data[(dim - 1) * dim + eigen_count] = 1;
+            for (ik = dim - 2; ik >= 0; ik--){
+                MATRIX_TYPE sum2 = 0;
+                for (jk = ik + 1; jk < dim; jk++){
+                    sum2 += _mat_->data[ik * dim + jk] * eigen_vector->data[jk * dim + eigen_count];
+                }
+                if (fabs(_mat_->data[ik * dim + ik]) > _APPROXIMATELY_ZERO_){
+                
+                    sum2 = -sum2 / _mat_->data[ik * dim + ik];
+                }else{
+                    sum2 = 1;
+                }
+                sum1 += sum2 * sum2;
+                eigen_vector->data[ik * dim + eigen_count] = sum2;
+            }
+            M_free(_mat_);
+            sum1 = sqrt(sum1);
+            for (i = 0; i < dim; i++){
+                eigen_vector->data[i * dim + eigen_count] /= sum1;
+            }
         }
+    }else{
+        printf(M_eigen_026);
+        system("pause");
     }
-
-    gsl_vector *eval = gsl_vector_alloc(n);
-    gsl_matrix *evec = gsl_matrix_alloc(n, n);
-    gsl_eigen_symmv_workspace *w = gsl_eigen_symmv_alloc(n);
-
-    gsl_eigen_symmv(m, eval, evec, w);
-
-    gsl_eigen_symmv_free(w);
-    gsl_matrix_free(m);
-
-    nodeType *result = (nodeType *)malloc(sizeof(nodeType));
-    result->rows = n;
-    result->cols = 2; 
-    result->data = (double **)malloc(n * sizeof(double *));
-    for (int i = 0; i < n; i++) {
-        result->data[i] = (double *)malloc((n + 1) * sizeof(double));
-        result->data[i][0] = gsl_vector_get(eval, i);
-        for (int j = 0; j < n; j++) {
-            result->data[i][j + 1] = gsl_matrix_get(evec, i, j);
-        }
-    }
-
-    gsl_vector_free(eval);
-    gsl_matrix_free(evec);
-
-    return result;
+    return M_array_eigen_vec;
 }
 
 // Find the Trace of a matrix
