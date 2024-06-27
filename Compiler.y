@@ -343,13 +343,10 @@ nodeType *func_operation(){
                     else if (temp_Identifier == 18){
                         return determinant(arguments[0]);
                     }
-                    // else if (temp_Identifier == 19){
-                        // return eigen(arguments[0]);
-                    //}
-                    else if (temp_Identifier == 20){
+                    else if (temp_Identifier == 19){
                         return trace(arguments[0]);
                     }
-                    else if (temp_Identifier == 21){
+                    else if (temp_Identifier == 20){
                         return inverse_matrix(arguments[0]);
                     }
                 } 
@@ -617,7 +614,7 @@ double apply_function(int num, ...){
         case 12: result = sqrt(va_arg(valist, double));  break;
 
         /* Functions with 2 arguments */
-        case 20: temp_arr[0] = va_arg(valist, double); 
+        case 25: temp_arr[0] = va_arg(valist, double); 
                  result = fmod(temp_arr[0], va_arg(valist, double)); break;
         
         /* Functions with 3 arguments */
@@ -803,9 +800,9 @@ nodeType* verzat_array(nodeType* matrix1, nodeType* matrix2) {
 
 // Cross product of two matrix -- temp_Identifier = 25
 nodeType* cross_product(nodeType* matrix1, nodeType* matrix2) {
-    if (matrix1->type != typeVector || matrix2->type != typeVector) {
+    if (matrix1->type != typeMatrix || matrix2->type != typeMatrix) {
         error_flag = 1;
-        printf("Invalid input types. Only vectors can be cross multiplied.\n");
+        printf("Invalid input types. Only matrix can be cross multiplied.\n");
     }
 
     if (matrix1->mat.col != matrix2->mat.row){
@@ -815,8 +812,8 @@ nodeType* cross_product(nodeType* matrix1, nodeType* matrix2) {
 
     nodeType* p = malloc(sizeof(nodeType));
     p->type = typeMatrix;
-    p->mat.row = matrix1->mat.row;
-    p->mat.col = matrix2->mat.col;
+    p->mat.row = matrix1->mat.col;
+    p->mat.col = matrix2->mat.row;
     p->mat.matrix = malloc(sizeof(double*) * p->mat.row);
 
     for (int i=0; i < p->mat.row; i++) {
@@ -826,7 +823,7 @@ nodeType* cross_product(nodeType* matrix1, nodeType* matrix2) {
     for (int i = 0; i < p->mat.row; i++) {
         for (int j = 0; j < p->mat.col; j++) {
             p->mat.matrix[i][j] = 0;
-            for (int k = 0; k < matrix1->mat.col; k++) {
+            for (int k = 0; k < matrix1->mat.row; k++) {
                 p->mat.matrix[i][j] += matrix1->mat.matrix[i][k] * matrix2->mat.matrix[k][j];
             }
         }
