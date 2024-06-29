@@ -1000,24 +1000,20 @@ nodeType* determinant(nodeType *matrix1) {
     return p;
 }
 
-// Find the Eigenvalues and corresponding eigenvectors of a matrix
-
 // Find the Trace of a matrix
 nodeType* trace(nodeType *matrix1) {
     if (matrix1->mat.row != matrix1->mat.col) {
-        fprintf(stderr, "Matrix must be square to compute trace.\n");
-        exit(EXIT_FAILURE);
+	error_flag = 1;
+	printf("Matrix must be square to compute trace.\n");
+        return NULL;
     }
     double trace = 0;
     for (int i = 0; i < matrix1->mat.row; i++) {
         trace += matrix1->mat.matrix[i][i];
     }
     nodeType *result = (nodeType *)malloc(sizeof(nodeType));
-    result->mat.row = 1;
-    result->mat.col = 1;
-    result->mat.matrix = (double **)malloc(sizeof(double *));
-    result->mat.matrix[0] = (double *)malloc(sizeof(double));
-    result->mat.matrix[0][0] = trace;
+    result->type = typeConstant;
+    result->cons = trace;
     return result;
 }
 
